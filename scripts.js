@@ -1,5 +1,6 @@
 let collectedKey;
 let currentWord="";
+let currentCellNumber=1;
 
 const drawGrid = () => {
     let containerElement = document.querySelector('#container');
@@ -17,10 +18,15 @@ function collectKey(e){
     if(e.code.includes("Key")){
         collectedKey = e.key; 
         console.log('is key ' + collectedKey);
-        drawKey(e.key);
+        drawKey(e.key,'draw');
+
     }
     else if(e.code=="Enter"){
         checkWord(currentWord);
+    }
+    else if(e.code=="Backspace"){
+        drawKey(e.key,'delete');
+        //TODO: Remove key from currentWord
     }
     else{
         console.log('is not key ' + e.code);
@@ -30,6 +36,21 @@ function collectKey(e){
     }
 }
 
+function drawKey(key,action){
+    if(action == "draw"){
+        let currentCell = document.querySelector(`#container > div:nth-child(${currentCellNumber})`);
+        currentCell.textContent = key.toUpperCase();
+        currentCellNumber++;
+    }
+    if(action == "delete" && currentCellNumber>0){
+        currentCellNumber--;
+        let currentCell = document.querySelector(`#container > div:nth-child(${currentCellNumber})`);
+        currentCell.textContent = '';
+    }
+}
+
+
+//TODO: Finish checkWord function
 function checkWord(word){
     if(word.length<5){
         console.log("Not enough letters");
