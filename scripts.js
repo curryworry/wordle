@@ -93,9 +93,7 @@ function displayWinGame(){
         let currentCell = document.querySelector(`#container > div:nth-child(${cellIndex})`);
         currentCell.classList.add('green-guess');
     }
-    
-    //TODO: Display this as alert
-    //TODO: Finish function
+    alertBox.textContent = "You won!";
 }
 
 function revealClues(correctAnswer,word){
@@ -110,7 +108,6 @@ function revealClues(correctAnswer,word){
         let cellIndex = (rowNumber * 5) + i + 1;
         let currentCell = document.querySelector(`#container > div:nth-child(${cellIndex})`);
         if(userWord[i]==correctWord[i]){
-            //TODO: Paint Green
             currentCell.classList.add('green-guess');
         }
         else if(correctAnswer.includes(userWord[i])){
@@ -122,7 +119,6 @@ function revealClues(correctAnswer,word){
     }
     currentWord = "";
     rowNumber++;
-    //TODO: Write function
 }
 
 function addToCurrentWord(key){
@@ -139,8 +135,6 @@ async function getWord(){
 async function main(){
     drawGrid();
     let correctAnswer = await getWord();
-    // TODO: Compare user's word with correct answer and perform appropriate colouring
-    // TODO: Win condition
     // TODO: Lose condition
 }
 
