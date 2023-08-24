@@ -1,6 +1,7 @@
 let collectedKey;
 let currentWord="";
 let currentCellNumber=1;
+let alertBox = document.querySelector("#alert-box");
 
 const drawGrid = () => {
     let containerElement = document.querySelector('#container');
@@ -16,6 +17,7 @@ document.addEventListener('keydown',collectKey);
 
 function collectKey(e){
     if(e.code.includes("Key") && currentWord.length<5){
+        alertBox.textContent = "";
         collectedKey = e.key; 
         console.log('is key ' + collectedKey);
         drawKey(e.key,'draw');
@@ -50,19 +52,25 @@ function drawKey(key,action){
 //TODO: Finish checkWord function
 async function checkWord(word){
     if(word.length<5){
-        console.log("Not enough letters");
-        //TODO: Log this as an alert.
+        alertBox.textContent = "Not enough letters!";
     }
     else{
-        let correctAnswer = await getWord();
-        if(correctAnswer == currentWord){
-            displayWinGame();
+        if (isWord(word)) {
+            let correctAnswer = await getWord();
+            if(correctAnswer == currentWord){
+                displayWinGame();
+            }
+            else{
+                revealColours(correctAnswer);
+            }
         }
         else{
-            revealColours(correctAnswer);
+            alertBox.textContent = "Not a word";
         }
     }
 }
+
+//TODO: Write isWord function to check if entered word is a word
 
 function displayWinGame(){
     console.log("Game won!");
