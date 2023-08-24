@@ -39,6 +39,7 @@ function drawKey(key,action){
     if(action == "draw"){
         let currentCell = document.querySelector(`#container > div:nth-child(${currentCellNumber})`);
         currentCell.textContent = key.toUpperCase();
+        currentCell.classList.add('unvalidated')    ;
         currentCellNumber++;
     }
     if(action == "delete" && currentCellNumber>0){
@@ -49,13 +50,13 @@ function drawKey(key,action){
 }
 
 
-//TODO: Finish checkWord function
 async function checkWord(word){
     if(word.length<5){
         alertBox.textContent = "Not enough letters!";
     }
     else{
-        if (isWord(word)) {
+        let isWord = await isWordCheck(word);
+        if (isWord) {
             let correctAnswer = await getWord();
             if(correctAnswer == currentWord){
                 displayWinGame();
@@ -70,7 +71,19 @@ async function checkWord(word){
     }
 }
 
-//TODO: Write isWord function to check if entered word is a word
+
+async function isWordCheck(userWord){
+    let url = "https://words.dev-apis.com/validate-word";
+    let message = {
+        word: userWord
+    };
+    let response = await fetch(url,{
+        method: "POST",
+        body: JSON.stringify(message),
+    });
+    let processedResponse = await response.json();
+    return processedResponse.validWord;
+}
 
 function displayWinGame(){
     console.log("Game won!");
@@ -97,9 +110,6 @@ async function getWord(){
 async function main(){
     drawGrid();
     let correctAnswer = await getWord();
-    // TODO: Validate keypress to ignore special characters
-    // TODO: Collect keypresses into word
-    // TODO: Display keypresses on screen
     // TODO: Compare user's word with correct answer and perform appropriate colouring
     // TODO: Win condition
     // TODO: Lose condition
