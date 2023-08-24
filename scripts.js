@@ -15,24 +15,21 @@ const drawGrid = () => {
 document.addEventListener('keydown',collectKey);
 
 function collectKey(e){
-    if(e.code.includes("Key")){
+    if(e.code.includes("Key") && currentWord.length<5){
         collectedKey = e.key; 
         console.log('is key ' + collectedKey);
         drawKey(e.key,'draw');
-
+        addToCurrentWord(collectedKey);
     }
     else if(e.code=="Enter"){
         checkWord(currentWord);
     }
     else if(e.code=="Backspace"){
         drawKey(e.key,'delete');
-        //TODO: Remove key from currentWord
+        currentWord = currentWord.slice(0,-1);
     }
     else{
         console.log('is not key ' + e.code);
-    }
-    if(currentWord.length<5){
-    addToCurrentWord(collectedKey);
     }
 }
 
@@ -51,11 +48,31 @@ function drawKey(key,action){
 
 
 //TODO: Finish checkWord function
-function checkWord(word){
+async function checkWord(word){
     if(word.length<5){
         console.log("Not enough letters");
         //TODO: Log this as an alert.
     }
+    else{
+        let correctAnswer = await getWord();
+        if(correctAnswer == currentWord){
+            displayWinGame();
+        }
+        else{
+            revealColours(correctAnswer);
+        }
+    }
+}
+
+function displayWinGame(){
+    console.log("Game won!");
+    //TODO: Display this as alert
+    //TODO: Finish function
+}
+
+function revealColours(correctAnswer){
+    console.log("Wrong guess");
+    //TODO: Write function
 }
 
 function addToCurrentWord(key){
