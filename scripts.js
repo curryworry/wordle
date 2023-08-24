@@ -1,6 +1,7 @@
 let collectedKey;
 let currentWord="";
 let currentCellNumber=1;
+let rowNumber = 0;
 let alertBox = document.querySelector("#alert-box");
 
 const drawGrid = () => {
@@ -58,11 +59,11 @@ async function checkWord(word){
         let isWord = await isWordCheck(word);
         if (isWord) {
             let correctAnswer = await getWord();
-            if(correctAnswer == currentWord){
+            if(correctAnswer == word){
                 displayWinGame();
             }
             else{
-                revealColours(correctAnswer);
+                revealClues(correctAnswer,word);
             }
         }
         else{
@@ -87,12 +88,40 @@ async function isWordCheck(userWord){
 
 function displayWinGame(){
     console.log("Game won!");
+    for (let i = 0; i < 5; i++) {
+        let cellIndex = (rowNumber * 5) + i + 1;
+        let currentCell = document.querySelector(`#container > div:nth-child(${cellIndex})`);
+        currentCell.classList.add('green-guess');
+    }
+    
     //TODO: Display this as alert
     //TODO: Finish function
 }
 
-function revealColours(correctAnswer){
+function revealClues(correctAnswer,word){
     console.log("Wrong guess");
+    console.log("correct answer is " + correctAnswer);
+    console.log("your choice was " + word);
+    let userWord = Array.from(word);
+    let correctWord = Array.from(correctAnswer);
+    console.log(userWord);
+    console.log(correctWord);
+    for(let i=0;i<5;i++){
+        let cellIndex = (rowNumber * 5) + i + 1;
+        let currentCell = document.querySelector(`#container > div:nth-child(${cellIndex})`);
+        if(userWord[i]==correctWord[i]){
+            //TODO: Paint Green
+            currentCell.classList.add('green-guess');
+        }
+        else if(correctAnswer.includes(userWord[i])){
+            currentCell.classList.add('yellow-guess');
+        }
+        else{
+            currentCell.classList.add('grey-guess');
+        }
+    }
+    currentWord = "";
+    rowNumber++;
     //TODO: Write function
 }
 
